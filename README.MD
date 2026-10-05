@@ -1,0 +1,3 @@
+# ESCAPE FROM RAĢ
+Mērķis: ESCAPE FROM RAĢ, GET LOOT AND IF YOU LOSE YOU WILL STAY THERE UNTIL 6PM.
+Atvēršana: atver index.html pārlūkā.

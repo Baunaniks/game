@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ķērājs</title>
+<title>Mana spēle</title>
 <style>
 body { font-family: Arial, sans-serif; max-width: 680px; margin: 24px auto; padding: 16px; line-height: 1.6; }
 button, input { font: inherit; padding: 10px; margin: 4px; }
@@ -14,23 +14,30 @@ img { max-width: 100%; height: auto; }
 </style>
 </head>
 <body>
-<header>
-  <h1>ķērājs</h1>
-</header>
-<main>
-  <p>Noķer skrienošo.</p>
-  <ul>
-    <li>spied uz skrienošā.</li>
-  </ul>
-</main>
-<footer>
-  <p>Spēle brīvajam laikam.</p>
-  <h2>Spēles noteikumi</h2>
-<p><strong>Mērķis:</strong> noķer skrienošo pirms laiks beidzas.</p>
-<ul>
-  <li>Vadi ķērāju ar pogām A un D.</li>
-  <li>Izvairies no slazdiem.</li>
-</ul>
-</footer>
+<h1>escape from raģ</h1>
+<p>collect five notebooks.</p>
+<p>after you collect five notebooks the teacher will become faster and will chase you, if you fail to escape you will have to stay there all day.</p>
+<p>You win by escaping the school you walk with w a s d keys look and turn with a mouse.</p>
+<section id="sakums">
+  <h2>RAĢ</h2>
+  <button onclick="paraditSpeli()">escape from raģ?</button>
+</section>
+<section id="laukums" hidden>
+  <h2>Spēles ekrāns</h2>
+  <p>Punkti: 0</p>
+  <p>the player will need to escape from raģ.</p>
+  <button onclick="paraditSakumu()">give up</button>
+</section>
+<script>
+// Gatavā palīdzība pogām. Šodien maini lapas tekstu un izvietojumu.
+function paraditSpeli() {
+  document.getElementById("sakums").hidden = true;
+  document.getElementById("laukums").hidden = false;
+}
+function paraditSakumu() {
+  document.getElementById("sakums").hidden = false;
+  document.getElementById("laukums").hidden = true;
+}
+</script>
 </body>
 </html>
