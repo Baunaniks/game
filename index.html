@@ -5,39 +5,132 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mana spēle</title>
 <style>
-body { font-family: Arial, sans-serif; max-width: 680px; margin: 24px auto; padding: 16px; line-height: 1.6; }
-button, input { font: inherit; padding: 10px; margin: 4px; }
-button { cursor: pointer; }
-img { max-width: 100%; height: auto; }
-[hidden] { display: none !important; }
-
+  body {
+    max-width: 680px;
+    margin: 24px auto;
+    padding: 16px;
+    background-color: #f1f5f9;
+    color: #17212b;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+  }
+  h1 { color: #245b91; }
+  button, input {
+    margin: 4px;
+    padding: 10px;
+    font: inherit;
+  }
+  button {
+    border: 0;
+    background-color: #245b91;
+    color: #ffffff;
+    cursor: pointer;
+  }
+  img { max-width: 100%; height: auto; }
+  .noteikumi {
+    padding: 12px;
+    background-color: #ffffff;
+  }
+  .speles-laukums {
+    position: relative;
+    overflow: hidden;
+    min-height: 320px;
+    margin: 16px 0;
+    padding: 16px;
+    border: 3px solid #245b91;
+    background-color: #dce8f2;
+  }
+  .varonis {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    width: 42px;
+    height: auto;
+    image-rendering: pixelated;
+  }
+  [hidden] { display: none !important; }
 </style>
 </head>
 <body>
-<h1>escape from raģ</h1>
-<p>collect five notebooks.</p>
-<p>after you collect five notebooks the teacher will become faster and will chase you, if you fail to escape you will have to stay there all day.</p>
-<p>You win by escaping the school you walk with w a s d keys look and turn with a mouse.</p>
+<h1>Bēgšana no RAĢ</h1>
+<section class="noteikumi" aria-label="Spēles noteikumi">
+  <p>Savāc piecas piezīmju grāmatiņas. Pēc tam skolotājs kļūs ātrāks un sāks tevi vajāt. Ja neizdosies aizbēgt, tev tur būs jāpavada visa diena.</p>
+  <p>Lai uzvarētu, aizbēdz no skolas. Pārvietojies ar W, A, S un D taustiņiem, bet skaties apkārt ar peli.</p>
+</section>
 <section id="sakums">
   <h2>RAĢ</h2>
-  <button onclick="paraditSpeli()">escape from raģ?</button>
+  <button onclick="paraditSpeli()">Sākt spēli</button>
 </section>
 <section id="laukums" hidden>
   <h2>Spēles ekrāns</h2>
-  <p>Punkti: 0</p>
-  <p>the player will need to escape from raģ.</p>
-  <button onclick="paraditSakumu()">give up</button>
+  <p>Punkti: <span id="punktu-skaits">0</span></p>
+  <p>Tev jāizkļūst no RAĢ.</p>
+  <div class="speles-laukums" role="img" aria-label="Spēles laukums ar varoni">
+    <img class="varonis" src="atteli%20un%20ska%C5%86as/varonis.png" alt="">
+  </div>
+  <audio id="speles-skanas" controls preload="none">
+    <source src="atteli%20un%20ska%C5%86as/klikskis.wav" type="audio/wav">
+    Jūsu pārlūks neatbalsta audio atskaņošanu.
+  </audio>
+  <button onclick="paraditSakumu()">Padoties</button>
 </section>
 <script>
-// Gatavā palīdzība pogām. Šodien maini lapas tekstu un izvietojumu.
+let punkti = 0;
+
 function paraditSpeli() {
   document.getElementById("sakums").hidden = true;
   document.getElementById("laukums").hidden = false;
+  document.querySelector(".varonis").style.left = "16px";
+  document.querySelector(".varonis").style.top = "16px";
+  punkti = 0;
+  document.getElementById("punktu-skaits").textContent = punkti;
+  const skana = document.getElementById("speles-skanas");
+  skana.pause();
+  skana.currentTime = 0;
 }
 function paraditSakumu() {
   document.getElementById("sakums").hidden = false;
   document.getElementById("laukums").hidden = true;
+  const skana = document.getElementById("speles-skanas");
+  skana.pause();
+  skana.currentTime = 0;
 }
+
+document.addEventListener("keydown", (event) => {
+  const taustins = event.key.toLowerCase();
+  const virzieni = {
+    w: [0, -1],
+    a: [-1, 0],
+    s: [0, 1],
+    d: [1, 0]
+  };
+  const virziens = virzieni[taustins];
+  if (!virziens || document.getElementById("laukums").hidden) return;
+
+  event.preventDefault();
+  const laukums = document.querySelector(".speles-laukums");
+  const varonis = document.querySelector(".varonis");
+  const solis = 12;
+  const x = parseFloat(varonis.style.left);
+  const y = parseFloat(varonis.style.top);
+  const maxX = laukums.clientWidth - varonis.offsetWidth;
+  const maxY = laukums.clientHeight - varonis.offsetHeight;
+  const jaunsX = Math.max(0, Math.min(maxX, x + virziens[0] * solis));
+  const jaunsY = Math.max(0, Math.min(maxY, y + virziens[1] * solis));
+  if (jaunsX === x && jaunsY === y) return;
+
+  varonis.style.left = `${jaunsX}px`;
+  varonis.style.top = `${jaunsY}px`;
+  punkti += 1;
+  document.getElementById("punktu-skaits").textContent = punkti;
+
+  const skana = document.getElementById("speles-skanas");
+  skana.currentTime = 0;
+  skana.play().catch((error) => {
+    if (error.name === "AbortError") return;
+    console.error("Neizdevās atskaņot kustības skaņu.", error);
+  });
+});
 </script>
 </body>
 </html>
